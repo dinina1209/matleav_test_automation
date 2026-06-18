@@ -5,8 +5,31 @@ test('Browser Context Playwright test',async ({browser})=>{
     //chrome - open new borwser without any cookie / cache
     const context = await browser.newContext();
     const page = await context.newPage();
+    const userName = page.locator("#username");
+    const signIn = page.locator("#signInBtn");
+    const cardTitles = page.locator(".card-body a");
+
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     console.log( await page.title());
+
+    //css, xpath
+    await userName.fill("dini na");
+    await page.locator("[type='password']").fill("Learning@830$3mK2");
+    await signIn.click();
+
+    //it takes some time until warning message to be displayed
+    console.log(await page.locator("[style*='block']").textContent());
+    await expect(page.locator("[style*='block']")).toContainText('Incorrect');
+
+    //type-fill
+    await userName.fill(""); //wipe out
+    await userName.fill("rahulshettyacademy");
+    await signIn.click();
+    console.log(await cardTitles.first().textContent());
+    console.log(await cardTitles.nth(1).textContent());
+    //array
+    const allTitles = await cardTitles.allTextContents();
+    console.log(allTitles);
 });
 
 test('Page Playwright test', async({page})=>{
