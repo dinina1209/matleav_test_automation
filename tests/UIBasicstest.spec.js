@@ -7,6 +7,15 @@ test('Browser Context Playwright test',async ({browser})=>{
     const page = await context.newPage();
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     console.log( await page.title());
+
+    //css, xpath
+    await page.locator("#username").fill("dini");
+    await page.locator("[type='password']").fill("learning");
+    await page.locator("#signInBtn").click();
+
+    //it takes some time until warning message to be displayed
+    console.log(await page.locator("[style*='block']").textContent());
+    await expect(page.locator("[style*='block']")).toContainText('Incorrect');
 });
 
 test('Page Playwright test', async({page})=>{
