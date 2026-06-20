@@ -32,9 +32,29 @@ test('Browser Context Playwright test',async ({browser})=>{
     console.log(allTitles);
 });
 
-test('Page Playwright test', async({page})=>{
-    await page.goto("https://google.com");
-    // get title - assertion
-    console.log(await page.title());
-    await expect(page).toHaveTitle("Google");
+test.only('UI Controls', async({page})=>{
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    const userName = page.locator("#username");
+    const signIn = page.locator("#signInBtn");
+    const dropdown = page.locator("select.form-control");
+    await dropdown.selectOption("Consultant");
+    const documentLink = page.locator("[href*='documents-request']");
+    await page.locator(".radiotextsty").last().click();
+    await page.locator("#okayBtn").click();
+
+    //assert if option "User" is clicked
+    await expect(page.locator(".radiotextsty").last()).toBeChecked();
+    
+    // click t&c
+    await page.locator("#terms").click();
+    // assert t&c clicked => toBeChecked
+    await expect(page.locator("#terms")).toBeChecked();
+    // unclick t&c
+    await page.locator("#terms").uncheck();
+    // assert UNclicked t&c 
+    expect(await page.locator("#terms").isChecked()).toBeFalsy();
+
+    //assert blinking effect => topHaveAttribute
+    await expect(documentLink).toHaveAttribute("class", "blinkingText");
+    
 });
