@@ -32,7 +32,7 @@ test('Browser Context Playwright test',async ({browser})=>{
     console.log(allTitles);
 });
 
-test.only('UI Controls', async({page})=>{
+test('UI Controls', async({page})=>{
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
     const userName = page.locator("#username");
     const signIn = page.locator("#signInBtn");
@@ -57,4 +57,23 @@ test.only('UI Controls', async({page})=>{
     //assert blinking effect => topHaveAttribute
     await expect(documentLink).toHaveAttribute("class", "blinkingText");
     
+});
+
+test.only('Child window handle', async({browser})=>{
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+    const documentLink = page.locator("[href*='documents-request']");
+    
+    const [newPage] = await Promise.all([
+        context.waitForEvent("page"),//listen for any new page pending, rejected, fulfilled
+        documentLink.click() // new page is opened
+    ])
+
+    const text = await newPage.locator(".red").textContent();
+    const arrayText = text.split("@");
+    const domain = arrayText[1].split(" ")[0];
+    console.log('domain', domain);
+    await page.locator("#username").fill(domain);
+    console.log('original page username', await page.locator("#username").textContent());
 });
