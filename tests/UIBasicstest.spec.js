@@ -75,5 +75,5 @@ test.only('Child window handle', async({browser})=>{
     const domain = arrayText[1].split(" ")[0];
     console.log('domain', domain);
     await page.locator("#username").fill(domain);
-    console.log('original page username', await page.locator("#username").textContent());
+    console.log('original page username', await page.locator("#username").inputValue());
 });
