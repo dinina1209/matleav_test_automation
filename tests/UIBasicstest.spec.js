@@ -79,9 +79,9 @@ test('Child window handle', async({browser})=>{
 });
 
 test.only('Client App login', async({page})=>{
-    const productName = 'ZARA COAT 3';
+    const productName = "ZARA COAT 3";
     const products = page.locator(".card-body");
-    
+    const email = "anshika@gmail.com";
     await page.goto("https://rahulshettyacademy.com/client");
     await page.locator("#userEmail").fill("anshika@gmail.com");
     await page.locator("#userPassword").type("Iamking@000");
@@ -106,16 +106,22 @@ test.only('Client App login', async({page})=>{
     expect(bool).toBeTruthy();
 
     await page.locator("text=Checkout").click();
-    await page.locator("[placeholder*='Country']").pressSequentially("ind"); //typing slowly
+    await page.locator("[placeholder*='Country']").pressSequentially("ind", {delay: 150}); //typing slowly
     
     const dropdown = page.locator(".ta-results");
     await dropdown.waitFor();
-    const optionsCount = dropdown.locator("button").count();
-    for(let i=0; i< optionsCount; i++){
-        const text = await dropdown.locator("button").nth(i).textContent();
-        if( text.trim() === "India"){
-            await dropdown.locator("button").nth(i).click();
-            break;
-        }
-    }
+    const optionsCount = await dropdown.locator("button").count();
+   for (let i = 0; i < optionsCount; ++i) {
+      const text = await dropdown.locator("button").nth(i).textContent();
+      if (text === " India") {
+         await dropdown.locator("button").nth(i).click();
+         break;
+      }
+   }
+   
+   expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
+   await page.locator(".action__submit").click();
+   await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
+   const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
+   console.log(orderId);
 });
