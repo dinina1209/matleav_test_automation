@@ -86,7 +86,10 @@ test.only('Client App login', async({page})=>{
     await page.locator("#userEmail").fill("anshika@gmail.com");
     await page.locator("#userPassword").type("Iamking@000");
     await page.locator("[value='Login']").click();
+    
     await page.waitForLoadState('networkidle');
+    await page.locator(".card-body b").first().waitFor();
+    
     const titles = await products.allTextContents();
     const count = await products.count();
     for(let i=0; i<count; i++){
@@ -96,4 +99,9 @@ test.only('Client App login', async({page})=>{
             break;
         }
     }
+    await page.locator("[routerlink*='cart']").click();
+    await page.locator("div li").first().waitFor(); //wait for products to be loaded
+
+    const bool = await page.locator("h3:has-text('ZARA COAT 3')").isVisible();
+    expect(bool).toBeTruthy();
 });
