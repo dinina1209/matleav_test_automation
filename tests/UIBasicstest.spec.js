@@ -59,7 +59,7 @@ test('UI Controls', async({page})=>{
     
 });
 
-test.only('Child window handle', async({browser})=>{
+test('Child window handle', async({browser})=>{
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
@@ -76,4 +76,24 @@ test.only('Child window handle', async({browser})=>{
     console.log('domain', domain);
     await page.locator("#username").fill(domain);
     console.log('original page username', await page.locator("#username").inputValue());
+});
+
+test.only('Client App login', async({page})=>{
+    const productName = 'ZARA COAT 3';
+    const products = page.locator(".card-body");
+    
+    await page.goto("https://rahulshettyacademy.com/client");
+    await page.locator("#userEmail").fill("anshika@gmail.com");
+    await page.locator("#userPassword").type("Iamking@000");
+    await page.locator("[value='Login']").click();
+    await page.waitForLoadState('networkidle');
+    const titles = await products.allTextContents();
+    const count = await products.count();
+    for(let i=0; i<count; i++){
+        if(await products.nth(i).locator("b").textContent() === productName){
+            // add to cart
+            await products.nth(i).locator("text = Add To Cart").click();
+            break;
+        }
+    }
 });
