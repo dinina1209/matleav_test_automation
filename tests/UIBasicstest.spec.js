@@ -78,7 +78,7 @@ test('Child window handle', async({browser})=>{
     console.log('original page username', await page.locator("#username").inputValue());
 });
 
-test.only('Client App login', async({page})=>{
+test('Client App login', async({page})=>{
     const productName = "ZARA COAT 3";
     const products = page.locator(".card-body");
     const email = "anshika@gmail.com";
