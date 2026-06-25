@@ -1,6 +1,6 @@
 import {test} from '@playwright/test';
 
-test.only('Playwright Special locators', async({page})=>{
+test('Playwright Special locators', async({page})=>{
     await page.goto("https://rahulshettyacademy.com/angularpractice/");
     
     //clickable by clicking text
